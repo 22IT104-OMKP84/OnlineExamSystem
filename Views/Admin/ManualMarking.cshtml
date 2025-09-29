@@ -1,0 +1,380 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manual Marking";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Manual Marking</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="subjectFilter">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="refreshData()">Refresh</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="manualMarkingTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Exam Title</th>
+                                <th>Subject</th>
+                                <th>Questions Pending</th>
+                                <th>Priority</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.ManualMarkingItems != null)
+                            {
+                                @foreach (var item in ViewBag.ManualMarkingItems)
+                                {
+                                    var priorityClass = item.Priority switch
+                                    {
+                                        "High" => "bg-danger",
+                                        "Medium" => "bg-warning",
+                                        "Low" => "bg-success",
+                                        _ => "bg-secondary"
+                                    };
+                                    
+                                    var statusClass = item.Status switch
+                                    {
+                                        "Pending" => "bg-warning",
+                                        "In Progress" => "bg-info",
+                                        "Completed" => "bg-success",
+                                        _ => "bg-secondary"
+                                    };
+                                    
+                                    <tr>
+                                        <td>@item.StudentName</td>
+                                        <td>@item.ExamTitle</td>
+                                        <td>@item.Subject</td>
+                                        <td><span class="badge bg-warning">@item.QuestionsPending</span></td>
+                                        <td><span class="badge @priorityClass">@item.Priority</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="startMarking(@item.Id)">Start Marking</button>
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewAnswer(@item.Id)">View Answer</button>
+                                            <form method="post" action="@Url.Action("UpdateMarkingStatus", "Admin")" style="display: inline;">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <input type="hidden" name="status" value="@(item.Status == "Pending" ? "In Progress" : "Completed")" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                                    @(item.Status == "Pending" ? "Start" : "Complete")
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Manual Marking -->
+<div class="modal fade" id="markingModal" tabindex="-1" aria-labelledby="markingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="markingModalLabel">Manual Marking - <span id="studentName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="questionContainer">
+                            <!-- Questions will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Marking Panel</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Question Score</label>
+                                    <input type="number" class="form-control" id="questionScore" min="0" max="10" value="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Comments</label>
+                                    <textarea class="form-control" id="markingComments" rows="3" placeholder="Add comments..."></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Rubric</label>
+                                    <select class="form-select" id="rubricSelect">
+                                        <option value="">Select rubric...</option>
+                                        <option value="excellent">Excellent (9-10 points)</option>
+                                        <option value="good">Good (7-8 points)</option>
+                                        <option value="average">Average (5-6 points)</option>
+                                        <option value="poor">Poor (0-4 points)</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-success w-100" onclick="saveMarking()">Save Marking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for View Answer -->
+<div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="answerModalLabel">Student Answer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="answerModalBody">
+                <!-- Answer content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="startMarkingFromAnswer()">Start Marking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentQuestionIndex = 0;
+        let currentStudentId = null;
+        let questions = [];
+
+        // Sample questions data
+        const sampleQuestions = {
+            1: [
+                {
+                    id: 1,
+                    question: "Solve the quadratic equation: x² + 5x + 6 = 0",
+                    studentAnswer: "Using the quadratic formula: x = (-5 ± √(25-24))/2 = (-5 ± 1)/2\nTherefore, x = -2 or x = -3",
+                    maxScore: 10
+                },
+                {
+                    id: 2,
+                    question: "Find the derivative of f(x) = 3x² + 2x + 1",
+                    studentAnswer: "f'(x) = 6x + 2",
+                    maxScore: 10
+                },
+                {
+                    id: 3,
+                    question: "Calculate the area under the curve y = x² from x = 0 to x = 2",
+                    studentAnswer: "∫₀² x² dx = [x³/3]₀² = 8/3 - 0 = 8/3",
+                    maxScore: 10
+                }
+            ],
+            2: [
+                {
+                    id: 1,
+                    question: "Explain Newton's Second Law of Motion",
+                    studentAnswer: "Newton's Second Law states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. F = ma",
+                    maxScore: 10
+                },
+                {
+                    id: 2,
+                    question: "Calculate the kinetic energy of a 2kg object moving at 5 m/s",
+                    studentAnswer: "KE = ½mv² = ½ × 2 × 5² = ½ × 2 × 25 = 25 Joules",
+                    maxScore: 10
+                }
+            ],
+            3: [
+                {
+                    id: 1,
+                    question: "Balance the chemical equation: H₂ + O₂ → H₂O",
+                    studentAnswer: "2H₂ + O₂ → 2H₂O",
+                    maxScore: 10
+                }
+            ],
+            4: [
+                {
+                    id: 1,
+                    question: "Find the limit: lim(x→0) (sin x)/x",
+                    studentAnswer: "Using L'Hôpital's rule: lim(x→0) (sin x)/x = lim(x→0) cos x/1 = 1",
+                    maxScore: 10
+                },
+                {
+                    id: 2,
+                    question: "Calculate the definite integral: ∫₀¹ x³ dx",
+                    studentAnswer: "∫₀¹ x³ dx = [x⁴/4]₀¹ = 1/4 - 0 = 1/4",
+                    maxScore: 10
+                },
+                {
+                    id: 3,
+                    question: "Find the eigenvalues of the matrix [[2, 1], [1, 2]]",
+                    studentAnswer: "det(A - λI) = |2-λ 1| = (2-λ)² - 1 = λ² - 4λ + 3 = 0\n|1 2-λ|\nSolving: λ = 1 or λ = 3",
+                    maxScore: 10
+                },
+                {
+                    id: 4,
+                    question: "Solve the differential equation: dy/dx = 2x",
+                    studentAnswer: "∫ dy = ∫ 2x dx\ny = x² + C",
+                    maxScore: 10
+                }
+            ]
+        };
+
+        function refreshData() {
+            // Simulate refreshing data
+            alert('Data refreshed successfully!');
+        }
+
+        function startMarking(studentId) {
+            currentStudentId = studentId;
+            currentQuestionIndex = 0;
+            questions = sampleQuestions[studentId] || [];
+            
+            if (questions.length === 0) {
+                alert('No questions found for this student.');
+                return;
+            }
+
+            // Set student name in modal
+            const studentNames = {1: 'John Doe', 2: 'Jane Smith', 3: 'Mike Johnson', 4: 'Alice Brown'};
+            document.getElementById('studentName').textContent = studentNames[studentId];
+            
+            loadQuestion();
+            
+            const modal = new bootstrap.Modal(document.getElementById('markingModal'));
+            modal.show();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                alert('All questions have been marked!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('markingModal'));
+                modal.hide();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h6>Question ${currentQuestionIndex + 1} of ${questions.length}</h6>
+                    </div>
+                    <div class="card-body">
+                        <h6>Question:</h6>
+                        <p>${question.question}</p>
+                        <hr>
+                        <h6>Student Answer:</h6>
+                        <pre class="bg-light p-3 rounded">${question.studentAnswer}</pre>
+                    </div>
+                </div>
+            `;
+
+            // Reset marking panel
+            document.getElementById('questionScore').value = 0;
+            document.getElementById('markingComments').value = '';
+            document.getElementById('rubricSelect').value = '';
+        }
+
+        function saveMarking() {
+            const score = document.getElementById('questionScore').value;
+            const comments = document.getElementById('markingComments').value;
+            const rubric = document.getElementById('rubricSelect').value;
+
+            if (score < 0 || score > questions[currentQuestionIndex].maxScore) {
+                alert('Please enter a valid score.');
+                return;
+            }
+
+            // In a real application, this would save to the database
+            console.log('Saving marking:', {
+                questionId: questions[currentQuestionIndex].id,
+                score: score,
+                comments: comments,
+                rubric: rubric
+            });
+
+            alert('Marking saved successfully!');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function viewAnswer(studentId) {
+            currentStudentId = studentId;
+            const studentNames = {1: 'John Doe', 2: 'Jane Smith', 3: 'Mike Johnson', 4: 'Alice Brown'};
+            const questions = sampleQuestions[studentId] || [];
+            
+            if (questions.length === 0) {
+                alert('No answers found for this student.');
+                return;
+            }
+
+            let answerHtml = `<h6>Student: ${studentNames[studentId]}</h6><hr>`;
+            
+            questions.forEach((q, index) => {
+                answerHtml += `
+                    <div class="mb-4">
+                        <h6>Question ${index + 1}:</h6>
+                        <p><strong>${q.question}</strong></p>
+                        <h6>Student Answer:</h6>
+                        <pre class="bg-light p-3 rounded">${q.studentAnswer}</pre>
+                    </div>
+                `;
+            });
+
+            document.getElementById('answerModalBody').innerHTML = answerHtml;
+            
+            const modal = new bootstrap.Modal(document.getElementById('answerModal'));
+            modal.show();
+        }
+
+        function startMarkingFromAnswer() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('answerModal'));
+            modal.hide();
+            startMarking(currentStudentId);
+        }
+
+        // Filter functionality
+        document.getElementById('subjectFilter').addEventListener('change', function() {
+            const filterValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#manualMarkingTable tbody tr');
+            
+            rows.forEach(row => {
+                const subject = row.cells[2].textContent.toLowerCase();
+                if (filterValue === '' || subject.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Rubric selection handler
+        document.getElementById('rubricSelect').addEventListener('change', function() {
+            const rubricScores = {
+                'excellent': 9,
+                'good': 7,
+                'average': 5,
+                'poor': 2
+            };
+            
+            if (this.value && rubricScores[this.value]) {
+                document.getElementById('questionScore').value = rubricScores[this.value];
+            }
+        });
+    </script>
+}

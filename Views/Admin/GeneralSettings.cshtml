@@ -1,0 +1,57 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "General Settings";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">General Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">System Name</label>
+                            <input type="text" class="form-control" value="ExamEase" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-control" value="admin@examease.com" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Time Zone</label>
+                            <select class="form-select">
+                                <option>UTC</option>
+                                <option>EST</option>
+                                <option>PST</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Max Exam Duration (minutes)</label>
+                            <input type="number" class="form-control" value="120" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Auto Save Interval (seconds)</label>
+                            <input type="number" class="form-control" value="30" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Enable Notifications</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" checked />
+                                <label class="form-check-label">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

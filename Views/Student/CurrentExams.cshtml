@@ -1,0 +1,54 @@
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Current Exams";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Current Exams</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card border-success h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-success">English Literature</h6>
+                                <p class="card-text small text-muted">Subject: English</p>
+                                <p class="card-text small text-muted">Started: Jan 25, 2024</p>
+                                <p class="card-text small text-muted">Time Remaining: 45:30</p>
+                                <p class="card-text small text-muted">Progress: 3/10 questions</p>
+                                <div class="progress mb-3" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: 30%"></div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success btn-sm">Continue Exam</button>
+                                    <button class="btn btn-outline-danger btn-sm">Submit Exam</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card border-info h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-info">Computer Science</h6>
+                                <p class="card-text small text-muted">Subject: Computer Science</p>
+                                <p class="card-text small text-muted">Started: Jan 26, 2024</p>
+                                <p class="card-text small text-muted">Time Remaining: 1:15:20</p>
+                                <p class="card-text small text-muted">Progress: 7/15 questions</p>
+                                <div class="progress mb-3" style="height: 8px;">
+                                    <div class="progress-bar bg-info" style="width: 47%"></div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-info btn-sm">Continue Exam</button>
+                                    <button class="btn btn-outline-danger btn-sm">Submit Exam</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

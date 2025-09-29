@@ -1,0 +1,205 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Exam Management";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Exam Management</h5>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createExamModal">
+                    Create New Exam
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Exam ID</th>
+                                <th>Exam Title</th>
+                                <th>Subject</th>
+                                <th>Duration</th>
+                                <th>Start Date</th>
+                                <th>Questions</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Exams != null)
+                            {
+                                @foreach (var exam in ViewBag.Exams)
+                                {
+                                    <tr>
+                                        <td>E@(exam.Id.ToString("D3"))</td>
+                                        <td>@exam.Title</td>
+                                        <td>@exam.Subject</td>
+                                        <td>@exam.Duration min</td>
+                                        <td>@exam.StartDate</td>
+                                        <td>@exam.Questions.Count questions</td>
+                                        <td>
+                                            @{
+                                                var statusClass = exam.Status switch
+                                                {
+                                                    "Active" => "bg-success",
+                                                    "Draft" => "bg-info",
+                                                    "Completed" => "bg-warning",
+                                                    "Inactive" => "bg-secondary",
+                                                    _ => "bg-secondary"
+                                                };
+                                            }
+                                            <span class="badge @statusClass">@exam.Status</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="editExam(@exam.Id)">Edit</button>
+                                            <button class="btn btn-sm btn-outline-info" onclick="addQuestionsToExam(@exam.Id)" data-bs-toggle="modal" data-bs-target="#addQuestionsModal">Add Questions</button>
+                                            <form method="post" action="@Url.Action("DeleteExam", "Admin")" style="display: inline;">
+                                                <input type="hidden" name="id" value="@exam.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this exam?')">Delete</button>
+                                            </form>
+                                            <form method="post" action="@Url.Action("UpdateExamStatus", "Admin")" style="display: inline;">
+                                                <input type="hidden" name="id" value="@exam.Id" />
+                                                <input type="hidden" name="status" value="@(exam.Status == "Active" ? "Inactive" : "Active")" />
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                    @(exam.Status == "Active" ? "Deactivate" : "Activate")
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Exam Modal -->
+<div class="modal fade" id="createExamModal" tabindex="-1" aria-labelledby="createExamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createExamModalLabel">Create New Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="@Url.Action("AddExam", "Admin")">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="title" class="form-label">Exam Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">Select Subject</option>
+                                @if (ViewBag.Subjects != null)
+                                {
+                                    @foreach (var subject in ViewBag.Subjects)
+                                    {
+                                        <option value="@subject">@subject</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="duration" class="form-label">Duration (minutes)</label>
+                            <input type="number" class="form-control" id="duration" name="duration" min="15" max="300" required />
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required />
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Select Questions (Optional - can be added later)</label>
+                            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                                @if (ViewBag.Questions != null)
+                                {
+                                    @foreach (var question in ViewBag.Questions)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="questionIds" value="@question.Id" id="question@(question.Id)">
+                                            <label class="form-check-label" for="question@(question.Id)">
+                                                <strong>Q@(question.Id.ToString("D3")):</strong> @question.QuestionText.Substring(0, Math.Min(50, question.QuestionText.Length))@(question.QuestionText.Length > 50 ? "..." : "")
+                                                <span class="badge bg-secondary ms-2">@question.Subject</span>
+                                                <span class="badge bg-info ms-1">@question.Type</span>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Exam</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Questions to Exam Modal -->
+<div class="modal fade" id="addQuestionsModal" tabindex="-1" aria-labelledby="addQuestionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addQuestionsModalLabel">Add Questions to Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="@Url.Action("AddQuestionsToExam", "Admin")">
+                <input type="hidden" id="examIdForQuestions" name="examId" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Select Questions to Add</label>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                @if (ViewBag.Questions != null)
+                                {
+                                    @foreach (var question in ViewBag.Questions)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="questionIds" value="@question.Id" id="addQuestion@(question.Id)">
+                                            <label class="form-check-label" for="addQuestion@(question.Id)">
+                                                <strong>Q@(question.Id.ToString("D3")):</strong> @question.QuestionText.Substring(0, Math.Min(60, question.QuestionText.Length))@(question.QuestionText.Length > 60 ? "..." : "")
+                                                <span class="badge bg-secondary ms-2">@question.Subject</span>
+                                                <span class="badge bg-info ms-1">@question.Type</span>
+                                                <span class="badge bg-warning ms-1">@question.Difficulty</span>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Questions</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editExam(id) {
+    // TODO: Implement edit functionality
+    alert('Edit functionality will be implemented in the next update');
+}
+
+function addQuestionsToExam(examId) {
+    document.getElementById('examIdForQuestions').value = examId;
+}
+
+// Set minimum date to today for start date
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('startDate').min = today;
+});
+</script>

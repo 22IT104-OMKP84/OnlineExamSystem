@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OnlineExamSystem</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/OnlineExamSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="admin-wrapper d-flex">
+        <aside class="admin-sidebar d-flex flex-column">
+            <div class="sidebar-brand px-3 py-3 fw-bold">ExamEase</div>
+            <ul class="nav nav-pills flex-column mb-auto px-2">
+                <li class="nav-item"><a class="nav-link active" asp-area="" asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="GeneralSettings">General Settings</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ClassManagement">Class Management</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="UserManagement">User Management</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="SubjectManagement">Subject Management</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="QuestionManagement">Question Management</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ExamManagement">Exam Management</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ExamResult">Exam Result</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManualMarking">Manual Marking</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Admin" asp-action="LoginHistory">Login History</a></li>
+            </ul>
+        </aside>
+        <div class="admin-content flex-grow-1">
+            <header class="admin-topbar d-flex align-items-center justify-content-between px-4 border-bottom bg-white" style="min-height:64px">
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary d-md-none" id="sidebarToggle">☰</button>
+                    <span class="fs-5 fw-semibold">@ViewData["Title"]</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light border dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px">A</div>
+                            <span class="d-none d-md-inline">Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                            <li><hr class="dropdown-divider"/></li>
+                            <li>
+                                <form method="post" asp-controller="Login" asp-action="Logout" class="px-3 py-1">
+                                    <button type="submit" class="btn btn-link dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+            <main role="main" class="admin-main px-4 py-4">
+                @RenderBody()
+            </main>
+            <footer class="admin-footer text-muted px-4 py-3">
+                &copy; 2025 - OnlineExamSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </footer>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

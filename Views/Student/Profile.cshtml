@@ -1,0 +1,71 @@
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="rounded-circle bg-secondary-subtle text-secondary-emphasis d-flex align-items-center justify-content-center mx-auto mb-3" style="width:120px;height:120px;font-size:3rem;">
+                    S
+                </div>
+                <h5 class="card-title">John Doe</h5>
+                <p class="text-muted">Student ID: S001</p>
+                <p class="text-muted">Class: Mathematics 101</p>
+                <button class="btn btn-primary btn-sm">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" value="John" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" value="Doe" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="john.doe@email.com" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" value="+1 (555) 123-4567" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" value="1995-06-15" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" rows="3">123 Main Street, City, State 12345</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Emergency Contact</label>
+                            <input type="text" class="form-control" value="Jane Doe (Mother)" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Emergency Phone</label>
+                            <input type="tel" class="form-control" value="+1 (555) 987-6543" />
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

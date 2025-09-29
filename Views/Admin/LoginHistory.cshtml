@@ -1,0 +1,192 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login History";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Login History</h5>
+                <div>
+                    <input type="date" class="form-control form-control-sm d-inline-block w-auto me-2" id="dateFilter" />
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="roleFilter">
+                        <option value="">All Users</option>
+                        <option value="Student">Students</option>
+                        <option value="Teacher">Instructors</option>
+                        <option value="Admin">Admins</option>
+                    </select>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Success">Success</option>
+                        <option value="Failed">Failed</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="applyFilters()">Filter</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearFilters()">Clear</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="loginHistoryTable">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Role</th>
+                                <th>Login Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.LoginHistory != null)
+                            {
+                                foreach (var login in ViewBag.LoginHistory)
+                                {
+                                    var roleClass = login.Role == "Teacher" ? "bg-warning" : 
+                                                   login.Role == "Student" ? "bg-info" : "bg-danger";
+                                    var statusClass = login.Status == "Success" ? "bg-success" : "bg-danger";
+                                    
+                                    <tr>
+                                        <td>@login.UserName</td>
+                                        <td><span class="badge @roleClass">@login.Role</span></td>
+                                        <td>@login.LoginTime</td>
+                                        <td><span class="badge @statusClass">@login.Status</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewLoginDetails(@login.Id)">View Details</button>
+                                            @if (login.Status == "Failed")
+                                            {
+                                                <button class="btn btn-sm btn-outline-warning" onclick="blockUser('@login.UserName')">Block User</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Login Details -->
+<div class="modal fade" id="loginDetailsModal" tabindex="-1" aria-labelledby="loginDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginDetailsModalLabel">Login Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="loginDetailsModalBody">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function applyFilters() {
+            const dateFilter = document.getElementById('dateFilter').value;
+            const roleFilter = document.getElementById('roleFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#loginHistoryTable tbody tr');
+            
+            rows.forEach(row => {
+                const userName = row.cells[0].textContent;
+                const role = row.cells[1].textContent.trim();
+                const loginTime = row.cells[2].textContent;
+                const status = row.cells[3].textContent.trim();
+                
+                let showRow = true;
+                
+                // Date filter
+                if (dateFilter && !loginTime.includes(dateFilter)) {
+                    showRow = false;
+                }
+                
+                // Role filter
+                if (roleFilter && role !== roleFilter) {
+                    showRow = false;
+                }
+                
+                // Status filter
+                if (statusFilter && status !== statusFilter) {
+                    showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('roleFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            
+            const rows = document.querySelectorAll('#loginHistoryTable tbody tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }
+
+        function viewLoginDetails(loginId) {
+            const modal = new bootstrap.Modal(document.getElementById('loginDetailsModal'));
+            
+            // Simulate loading details (in real app, this would be an AJAX call)
+            const detailsHtml = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Login Information</h6>
+                        <p><strong>Login ID:</strong> ${loginId}</p>
+                        <p><strong>User Name:</strong> <span id="loginUserName">Loading...</span></p>
+                        <p><strong>Role:</strong> <span id="loginRole">Loading...</span></p>
+                        <p><strong>Login Time:</strong> <span id="loginTime">Loading...</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Session Details</h6>
+                        <p><strong>IP Address:</strong> 192.168.1.100</p>
+                        <p><strong>User Agent:</strong> Mozilla/5.0 (Windows NT 10.0; Win64; x64)</p>
+                        <p><strong>Browser:</strong> Chrome 120.0.0.0</p>
+                        <p><strong>Status:</strong> <span id="loginStatus">Loading...</span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Security Information</h6>
+                        <p><strong>Location:</strong> New York, USA</p>
+                        <p><strong>Device Type:</strong> Desktop</p>
+                        <p><strong>Session Duration:</strong> 2 hours 15 minutes</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('loginDetailsModalBody').innerHTML = detailsHtml;
+            modal.show();
+        }
+
+        function blockUser(userName) {
+            if (confirm(`Are you sure you want to block user "${userName}"?`)) {
+                // In a real application, this would send an AJAX request to block the user
+                alert(`User "${userName}" has been blocked successfully.`);
+                
+                // Update the UI to show the user is blocked
+                const rows = document.querySelectorAll('#loginHistoryTable tbody tr');
+                rows.forEach(row => {
+                    if (row.cells[0].textContent === userName) {
+                        const statusCell = row.cells[3];
+                        statusCell.innerHTML = '<span class="badge bg-danger">Blocked</span>';
+                    }
+                });
+            }
+        }
+
+        // Auto-apply filters when values change
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+        document.getElementById('roleFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    </script>
+}

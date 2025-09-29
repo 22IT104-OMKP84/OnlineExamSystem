@@ -1,0 +1,78 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Manual Marking";
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Manual Marking</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2">
+                        <option>All Subjects</option>
+                        <option>Mathematics</option>
+                        <option>Physics</option>
+                        <option>Chemistry</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm">Refresh</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Exam Title</th>
+                                <th>Subject</th>
+                                <th>Questions Pending</th>
+                                <th>Priority</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>John Doe</td>
+                                <td>Midterm Mathematics</td>
+                                <td>Mathematics</td>
+                                <td><span class="badge bg-warning">3</span></td>
+                                <td><span class="badge bg-danger">High</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Start Marking</button>
+                                    <button class="btn btn-sm btn-outline-info">View Answer</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S002</td>
+                                <td>Jane Smith</td>
+                                <td>Physics Final</td>
+                                <td>Physics</td>
+                                <td><span class="badge bg-warning">2</span></td>
+                                <td><span class="badge bg-warning">Medium</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Start Marking</button>
+                                    <button class="btn btn-sm btn-outline-info">View Answer</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S003</td>
+                                <td>Mike Johnson</td>
+                                <td>Chemistry Quiz</td>
+                                <td>Chemistry</td>
+                                <td><span class="badge bg-warning">1</span></td>
+                                <td><span class="badge bg-success">Low</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Start Marking</button>
+                                    <button class="btn btn-sm btn-outline-info">View Answer</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Past Exams";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Past Exams</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Exam Title</th>
+                                <th>Subject</th>
+                                <th>Date Taken</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mathematics Quiz 1</td>
+                                <td>Mathematics</td>
+                                <td>Jan 15, 2024</td>
+                                <td>85/100</td>
+                                <td><span class="badge bg-success">Passed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Result</button>
+                                    <button class="btn btn-sm btn-outline-info">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Physics Midterm</td>
+                                <td>Physics</td>
+                                <td>Jan 10, 2024</td>
+                                <td>78/100</td>
+                                <td><span class="badge bg-success">Passed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Result</button>
+                                    <button class="btn btn-sm btn-outline-info">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Chemistry Final</td>
+                                <td>Chemistry</td>
+                                <td>Dec 20, 2023</td>
+                                <td>92/100</td>
+                                <td><span class="badge bg-success">Passed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Result</button>
+                                    <button class="btn btn-sm btn-outline-info">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>History Quiz</td>
+                                <td>History</td>
+                                <td>Dec 15, 2023</td>
+                                <td>45/100</td>
+                                <td><span class="badge bg-danger">Failed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Result</button>
+                                    <button class="btn btn-sm btn-outline-warning">Retake</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

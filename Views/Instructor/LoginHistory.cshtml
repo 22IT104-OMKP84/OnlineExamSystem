@@ -1,0 +1,97 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Login History";
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Login History</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 3 Months</option>
+                        <option>Last Year</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm">Export</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>IP Address</th>
+                                <th>Device</th>
+                                <th>Browser</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dec 15, 2024 10:30 AM</td>
+                                <td>192.168.1.100</td>
+                                <td>Windows PC</td>
+                                <td>Chrome 120.0</td>
+                                <td>New York, USA</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dec 14, 2024 2:15 PM</td>
+                                <td>192.168.1.100</td>
+                                <td>Windows PC</td>
+                                <td>Chrome 120.0</td>
+                                <td>New York, USA</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dec 13, 2024 9:45 AM</td>
+                                <td>192.168.1.100</td>
+                                <td>Windows PC</td>
+                                <td>Chrome 120.0</td>
+                                <td>New York, USA</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dec 12, 2024 11:20 AM</td>
+                                <td>10.0.0.50</td>
+                                <td>iPhone</td>
+                                <td>Safari Mobile</td>
+                                <td>New York, USA</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dec 11, 2024 3:30 PM</td>
+                                <td>192.168.1.100</td>
+                                <td>Windows PC</td>
+                                <td>Chrome 120.0</td>
+                                <td>New York, USA</td>
+                                <td><span class="badge bg-danger">Failed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

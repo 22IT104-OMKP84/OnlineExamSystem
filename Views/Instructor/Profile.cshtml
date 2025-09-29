@@ -1,0 +1,73 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-secondary-subtle text-secondary-emphasis d-flex align-items-center justify-content-center mx-auto" style="width:120px;height:120px;font-size:48px">I</div>
+                </div>
+                <h5 class="card-title">Dr. Sarah Johnson</h5>
+                <p class="text-muted">Senior Instructor</p>
+                <p class="text-muted small">Department of Physics</p>
+                <button class="btn btn-outline-primary btn-sm">Change Photo</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Profile Information</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" value="Sarah" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" value="Johnson" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" value="sarah.johnson@university.edu" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" value="+1 (555) 123-4567" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Department</label>
+                                <input type="text" class="form-control" value="Physics" readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Employee ID</label>
+                                <input type="text" class="form-control" value="INS001" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-control" rows="3">Experienced physics instructor with 8+ years of teaching experience. Specialized in mechanics and thermodynamics. Passionate about making complex concepts accessible to students.</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Specializations</label>
+                        <input type="text" class="form-control" value="Mechanics, Thermodynamics, Wave Physics" />
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

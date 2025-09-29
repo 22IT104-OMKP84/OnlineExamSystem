@@ -1,0 +1,82 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Exam Results";
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Exam Results</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2">
+                        <option>All Exams</option>
+                        <option>Mathematics</option>
+                        <option>Physics</option>
+                        <option>Chemistry</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm">Export Results</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Exam Title</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>John Doe</td>
+                                <td>Midterm Mathematics</td>
+                                <td>Mathematics</td>
+                                <td>85/100</td>
+                                <td>85%</td>
+                                <td><span class="badge bg-success">Passed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-success">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S002</td>
+                                <td>Jane Smith</td>
+                                <td>Physics Final</td>
+                                <td>Physics</td>
+                                <td>92/100</td>
+                                <td>92%</td>
+                                <td><span class="badge bg-success">Passed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-success">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S003</td>
+                                <td>Mike Johnson</td>
+                                <td>Chemistry Quiz</td>
+                                <td>Chemistry</td>
+                                <td>45/100</td>
+                                <td>45%</td>
+                                <td><span class="badge bg-danger">Failed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-success">Download</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

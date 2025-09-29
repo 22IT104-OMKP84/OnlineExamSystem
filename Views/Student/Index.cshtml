@@ -1,0 +1,156 @@
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Upcoming Exams</div>
+                        <div class="stat-value">@ViewBag.UpcomingExams</div>
+                        <a href="@Url.Action("UpcomingExams", "Student")" class="stat-link">View Exams</a>
+                    </div>
+                    <div class="stat-icon">📅</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Current Exams</div>
+                        <div class="stat-value">@ViewBag.CurrentExams</div>
+                        <a href="@Url.Action("CurrentExams", "Student")" class="stat-link">View Exams</a>
+                    </div>
+                    <div class="stat-icon">▶</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Completed Exams</div>
+                        <div class="stat-value">@ViewBag.CompletedExams</div>
+                        <a href="@Url.Action("PastExams", "Student")" class="stat-link">View Results</a>
+                    </div>
+                    <div class="stat-icon">✔</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Average Score</div>
+                        <div class="stat-value">@Math.Round(ViewBag.AverageScore, 1)%</div>
+                        <a href="@Url.Action("ExamResults", "Student")" class="stat-link">View Details</a>
+                    </div>
+                    <div class="stat-icon">📊</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-12 col-xl-7">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Upcoming Exams</h6>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.UpcomingExamsList != null && ViewBag.UpcomingExamsList.Count > 0)
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var exam in ViewBag.UpcomingExamsList)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold">@exam.Title</div>
+                                    <small class="text-muted">@exam.Subject • @exam.Date</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-primary">@exam.Duration min</span>
+                                    <div class="small text-muted">@exam.TotalMarks marks</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted">
+                        <div class="mb-2" style="font-size:42px">📝</div>
+                        <div>No upcoming exams</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-5">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Recent Results</h6>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.RecentExams != null && ViewBag.RecentExams.Count > 0)
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var exam in ViewBag.RecentExams)
+                        {
+                            double percentage = 0;
+                            string statusClass = "text-muted";
+                            string statusIcon = "⏳";
+                            
+                            if (exam.Score != null)
+                            {
+                                percentage = Math.Round((double)exam.Score / exam.TotalMarks * 100, 1);
+                                statusClass = percentage >= 60 ? "text-success" : "text-danger";
+                                statusIcon = percentage >= 60 ? "✅" : "❌";
+                            }
+                            
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold">@exam.Title</div>
+                                    <small class="text-muted">@exam.Subject • @exam.Date</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="@statusClass">@statusIcon @percentage%</div>
+                                    <small class="text-muted">
+                                        @if (exam.Score != null)
+                                        {
+                                            @exam.Score
+                                        }
+                                        else
+                                        {
+                                            <span>Not graded</span>
+                                        }/@exam.TotalMarks
+                                    </small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted">
+                        <div class="mb-2" style="font-size:42px">📊</div>
+                        <div>No recent results</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

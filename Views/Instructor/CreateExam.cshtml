@@ -1,0 +1,135 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Create Exam";
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Create New Exam</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="CreateExam" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Exam Title</label>
+                                <input type="text" class="form-control" name="title" placeholder="Enter exam title" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Subject</label>
+                                <select class="form-select" name="subject" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="English">English</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Class</label>
+                                <select class="form-select" name="className" required>
+                                    <option value="">Select Class</option>
+                                    @foreach (var classItem in ViewBag.Classes)
+                                    {
+                                        <option value="@classItem.Name">@classItem.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Duration (minutes)</label>
+                                <input type="number" class="form-control" name="duration" placeholder="90" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Start Date & Time</label>
+                                <input type="datetime-local" class="form-control" name="startTime" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Total Marks</label>
+                                <input type="number" class="form-control" name="totalMarks" placeholder="100" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Instructions</label>
+                        <textarea class="form-control" name="instructions" rows="3" placeholder="Enter exam instructions"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Question Selection</label>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="mcq" name="questionTypes" value="MCQ" />
+                                            <label class="form-check-label" for="mcq">Multiple Choice (MCQ)</label>
+                                        </div>
+                                        @{
+                                            int mcqCount = 0;
+                                            foreach (var q in ViewBag.Questions)
+                                            {
+                                                if (q.Type == "MCQ") mcqCount++;
+                                            }
+                                        }
+                                        <small class="text-muted">Available: @mcqCount questions</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="numeric" name="questionTypes" value="Numeric" />
+                                            <label class="form-check-label" for="numeric">Numeric</label>
+                                        </div>
+                                        @{
+                                            int numericCount = 0;
+                                            foreach (var q in ViewBag.Questions)
+                                            {
+                                                if (q.Type == "Numeric") numericCount++;
+                                            }
+                                        }
+                                        <small class="text-muted">Available: @numericCount questions</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="essay" name="questionTypes" value="Essay" />
+                                            <label class="form-check-label" for="essay">Essay</label>
+                                        </div>
+                                        @{
+                                            int essayCount = 0;
+                                            foreach (var q in ViewBag.Questions)
+                                            {
+                                                if (q.Type == "Essay") essayCount++;
+                                            }
+                                        }
+                                        <small class="text-muted">Available: @essayCount questions</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2" onclick="saveDraft()">Save Draft</button>
+                        <button type="submit" class="btn btn-primary">Create Exam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function saveDraft() {
+        // In a real app, this would save the exam as a draft
+        alert('Exam saved as draft!');
+    }
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const questionTypes = document.querySelectorAll('input[name="questionTypes"]:checked');
+        if (questionTypes.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one question type.');
+        }
+    });
+</script>

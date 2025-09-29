@@ -1,0 +1,251 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Login - Online Exam System";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .page-bg { background: #fff7f2; }
+        .topbar { background: transparent; }
+        .brand { font-weight: 800; font-size: 28px; letter-spacing: .2px; }
+        .nav-link { color: #2b2b2b; }
+        .nav-link.active { background: #fff; border-radius: 10px; color: #2b2b2b; }
+        .btn-signup { background: #ff7a59; color: #fff; border: none; border-radius: 10px; padding: .5rem 1rem; }
+        .btn-signup:hover { filter: brightness(0.95); }
+        .content-card { border: none; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.08); overflow: hidden; }
+        .image-side { min-height: 540px; background-size: cover; background-position: center; }
+        .heading-xl { font-weight: 800; font-size: 42px; line-height: 1.2; }
+        .accent { color: #6f42c1; }
+        .form-label { font-weight: 600; }
+        .btn-login { background: #ff7a59; border: none; }
+        .btn-login:hover { filter: brightness(0.95); }
+        .forgot-link { color: #ff7a59; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+        .input-group-text { background: #f8f9fa; }
+        /* Sections */
+        .section { padding: 60px 0; }
+        .section-muted { background: #fff7f2; }
+        .eyebrow { color: #6f42c1; font-weight: 700; text-transform: none; margin-bottom: .5rem; }
+        .title-lg { font-weight: 800; font-size: 36px; line-height: 1.25; }
+        .benefit-card { background: #fff; border: none; border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,.06); height: 100%; }
+        .feature-pill { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: 0 8px 20px rgba(0,0,0,.05); text-align: center; font-weight: 600; }
+        .faq-card .accordion-button { background: #6f42c1; color: #fff; font-weight: 600; }
+        .faq-card .accordion-button:not(.collapsed) { color: #fff; }
+        .faq-card .accordion-item { border: none; box-shadow: 0 8px 24px rgba(0,0,0,.06); border-radius: 12px; overflow: hidden; }
+        .footer-bg { background: #cfe8ef; }
+        .social-btn { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: #ff7a59; color: #fff; border-radius: 50%; margin-right: .5rem; }
+    </style>
+</head>
+<body class="page-bg min-vh-100 d-flex flex-column">
+    <nav class="topbar navbar navbar-expand-lg py-3">
+        <div class="container">
+            <a class="navbar-brand brand" href="@Url.Action("Index","Home")">ExamEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#benefits">Benefits</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item d-none d-lg-block"><a class="nav-link active px-3" href="#">Login</a></li>
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0"><a class="btn btn-signup" href="@Url.Action("Register","Login")">Sign Up</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-fill">
+        <div class="container py-4 py-md-5">
+            <div class="content-card row g-0 align-items-center">
+                <div class="col-lg-6 image-side" style="background-image:url('https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?q=80&w=1600&auto=format&fit=crop');"></div>
+                <div class="col-lg-6 p-4 p-md-5">
+                    <h1 class="heading-xl mb-2"><span class="accent">Login</span> To ExamEase</h1>
+                    <p class="text-muted mb-4">Fill your username and password to sign in.</p>
+
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" asp-action="Login">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Username <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input type="email" class="form-control" id="Email" name="Email" required placeholder="you@example.com" value="@ViewBag.Email" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" id="Password" name="Password" required placeholder="Enter your password" />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword" aria-label="Show password"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me?</label>
+                            </div>
+                            <a href="#" class="forgot-link">Forgot your password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login btn-lg px-4">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Benefits -->
+    <section id="benefits" class="section section-muted">
+        <div class="container">
+            <p class="text-center eyebrow">Why ExamEase</p>
+            <h2 class="text-center title-lg mb-5">Randomizing Question Order, Scheduling Exam Start Date & Time,<br/>Storing Your Question Bank, And More.</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="benefit-card h-100 text-center">
+                        <img src="https://cdn.jsdelivr.net/gh/auroratide/assets/illustrations/study-1.svg" alt="Reusable" class="mb-3" style="height:120px"/>
+                        <h5 class="fw-bold mb-2">Reusable Questions</h5>
+                        <p class="text-muted mb-0">Save your question bank and re-use it in different exams with different mark distributions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card h-100 text-center">
+                        <img src="https://cdn.jsdelivr.net/gh/auroratide/assets/illustrations/study-2.svg" alt="Save Time" class="mb-3" style="height:120px"/>
+                        <h5 class="fw-bold mb-2">Save Your Time</h5>
+                        <p class="text-muted mb-0">Say goodbye to paper-based exams and the time-consuming manual grading system.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card h-100 text-center">
+                        <img src="https://cdn.jsdelivr.net/gh/auroratide/assets/illustrations/study-3.svg" alt="Simple" class="mb-3" style="height:120px"/>
+                        <h5 class="fw-bold mb-2">Simple Process</h5>
+                        <p class="text-muted mb-0">Create exam, pick from bank, allocate marks, done! Streamline your process.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+        <div class="container">
+            <p class="text-center eyebrow">Features</p>
+            <h2 class="text-center title-lg mb-5">ExamEase Contains Full Essential Features To Conduct An Exam.</h2>
+            <div class="row g-3">
+                <div class="col-6 col-md-3"><div class="feature-pill">Features</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Store question bank</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Schedule exam</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Students' result</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Import questions</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Import users</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Randomize question</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Release answer</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Export result</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Automatic regrading</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Analyze Chart</div></div>
+                <div class="col-6 col-md-3"><div class="feature-pill">Strict rules</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section section-muted">
+        <div class="container">
+            <p class="text-center eyebrow">FAQ</p>
+            <h2 class="text-center title-lg mb-4">Frequently Asked Questions</h2>
+            <div class="accordion faq-card" id="faqAccordion">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="q1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1" aria-expanded="true" aria-controls="a1">How is the support policy?</button>
+                    </h2>
+                    <div id="a1" class="accordion-collapse collapse show" aria-labelledby="q1" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">We provide support for fixing existing bugs and answering questions regarding the existing features. Custom modifications and direct installation are not part of support.</div>
+                    </div>
+                </div>
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="q2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2" aria-expanded="false" aria-controls="a2">When can I download the file after purchase the item?</button>
+                    </h2>
+                    <div id="a2" class="accordion-collapse collapse" aria-labelledby="q2" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Immediately after purchase you will receive the download link and instructions.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3" aria-expanded="false" aria-controls="a3">Can I edit or remove the Copyright text at the footer?</button>
+                    </h2>
+                    <div id="a3" class="accordion-collapse collapse" aria-labelledby="q3" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Yes, feel free to customize the footer text in your own project.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3"><a href="#" class="forgot-link fw-semibold">View More →</a></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-bg py-5 mt-4">
+        <div class="container">
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-4">
+                    <h3 class="fw-bold mb-2">AuraTheme</h3>
+                    <div class="mb-2"><strong>Email:</strong> auratheme@outlook.com</div>
+                    <div class="text-muted">© Copyright 2025 AuraTheme. All Rights Reserved.</div>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">Useful Links</h5>
+                    <div class="mb-2"><a href="#faq" class="text-decoration-none">ExamEase FAQ Articles ↗</a></div>
+                    <div><a href="@Url.Action("Index","Home")" class="text-decoration-none">.NET Web Application ↗</a></div>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">Follow Us</h5>
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-btn" aria-label="Website"><i class="fa-solid fa-globe"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="position-fixed bottom-0 end-0 translate-middle p-3" style="right:16px; bottom:16px;">
+        <span class="btn btn-primary rounded-circle" style="width:56px;height:56px;background:#6f42c1;border:none"><i class="fa-solid fa-arrow-up"></i></span>
+    </a>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function(){
+            const toggleBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('Password');
+            if (toggleBtn && passwordInput) {
+                toggleBtn.addEventListener('click', function () {
+                    const isPassword = passwordInput.getAttribute('type') === 'password';
+                    passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                    const icon = this.querySelector('i');
+                    if(icon){ icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash'); }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

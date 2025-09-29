@@ -1,0 +1,200 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register - Online Exam System";
+}
+
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <!-- Left side - Welcome message -->
+        <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-primary text-white">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold mb-4">Join Online Exam System</h1>
+                <p class="lead mb-4">Create your account and start your educational journey with us.</p>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <i class="fas fa-user-shield fa-3x mb-2"></i>
+                            <h5>Admin</h5>
+                            <small>System administration</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <i class="fas fa-chalkboard-teacher fa-3x mb-2"></i>
+                            <h5>Instructor</h5>
+                            <small>Teaching and assessment</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <i class="fas fa-graduation-cap fa-3x mb-2"></i>
+                            <h5>Student</h5>
+                            <small>Learning and evaluation</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Register form -->
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="w-100" style="max-width: 500px;">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-primary">Create Account</h2>
+                    <p class="text-muted">Fill in your information to get started</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @ViewBag.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @ViewBag.SuccessMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form method="post" asp-action="Register">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Name" class="form-label">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="Name" name="Name" required 
+                                       placeholder="Enter your full name" value="@ViewBag.Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="Email" name="Email" required 
+                                       placeholder="Enter your email" value="@ViewBag.Email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="Password" name="Password" required 
+                                       placeholder="Enter password" minlength="6">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Role" class="form-label">Role</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                <select class="form-select" id="Role" name="Role" required>
+                                    <option value="">Select your role</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Instructor">Instructor</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Department" class="form-label">Department</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                <input type="text" class="form-control" id="Department" name="Department" 
+                                       placeholder="e.g., Computer Science" value="@ViewBag.Department">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Phone" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <input type="tel" class="form-control" id="Phone" name="Phone" 
+                                       placeholder="Enter phone number" value="@ViewBag.Phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="studentIdField" style="display: none;">
+                        <label for="StudentId" class="form-label">Student ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            <input type="text" class="form-control" id="StudentId" name="StudentId" 
+                                   placeholder="Enter student ID">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center">
+                    <p class="mb-0">Already have an account? 
+                        <a href="@Url.Action("Index", "Login")" class="text-primary fw-bold">Sign in here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('Password');
+            const icon = this.querySelector('i');
+            
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                password.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Show/hide student ID field based on role selection
+        document.getElementById('Role').addEventListener('change', function() {
+            const studentIdField = document.getElementById('studentIdField');
+            if (this.value === 'Student') {
+                studentIdField.style.display = 'block';
+                document.getElementById('StudentId').required = true;
+            } else {
+                studentIdField.style.display = 'none';
+                document.getElementById('StudentId').required = false;
+            }
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+}

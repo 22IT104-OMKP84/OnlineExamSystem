@@ -1,0 +1,198 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Exam Result";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Exam Results</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="examFilter">
+                        <option value="">All Exams</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="exportResults()">Export Results</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="examResultsTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Exam Name</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.ExamResults != null)
+                            {
+                                foreach (var result in ViewBag.ExamResults)
+                                {
+                                    var percentage = Math.Round((double)result.Score / result.TotalMarks * 100, 1);
+                                    var status = percentage >= 60 ? "Passed" : "Failed";
+                                    var statusClass = percentage >= 60 ? "bg-success" : "bg-danger";
+                                    
+                                    <tr>
+                                        <td>@result.StudentName</td>
+                                        <td>@result.ExamName</td>
+                                        <td>@result.Score/@result.TotalMarks</td>
+                                        <td>@percentage%</td>
+                                        <td>@result.Date</td>
+                                        <td><span class="badge @statusClass">@status</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewDetails(@result.Id)">View Details</button>
+                                            <button class="btn btn-sm btn-outline-success" onclick="downloadResult(@result.Id)">Download</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for View Details -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Exam Result Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detailsModalBody">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="downloadDetailedResult()">Download Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentResultId = null;
+
+        // Filter functionality
+        document.getElementById('examFilter').addEventListener('change', function() {
+            const filterValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#examResultsTable tbody tr');
+            
+            rows.forEach(row => {
+                const examName = row.cells[1].textContent.toLowerCase();
+                if (filterValue === '' || examName.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        function viewDetails(resultId) {
+            currentResultId = resultId;
+            const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            
+            // Simulate loading details (in real app, this would be an AJAX call)
+            const detailsHtml = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Student Information</h6>
+                        <p><strong>Name:</strong> <span id="studentName">Loading...</span></p>
+                        <p><strong>Exam:</strong> <span id="examName">Loading...</span></p>
+                        <p><strong>Date:</strong> <span id="examDate">Loading...</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Performance Summary</h6>
+                        <p><strong>Score:</strong> <span id="examScore">Loading...</span></p>
+                        <p><strong>Percentage:</strong> <span id="examPercentage">Loading...</span></p>
+                        <p><strong>Status:</strong> <span id="examStatus">Loading...</span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Question Analysis</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Student Answer</th>
+                                        <th>Correct Answer</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Question 1</td>
+                                        <td>B</td>
+                                        <td>B</td>
+                                        <td><span class="badge bg-success">Correct</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Question 2</td>
+                                        <td>A</td>
+                                        <td>C</td>
+                                        <td><span class="badge bg-danger">Incorrect</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Question 3</td>
+                                        <td>D</td>
+                                        <td>D</td>
+                                        <td><span class="badge bg-success">Correct</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('detailsModalBody').innerHTML = detailsHtml;
+            modal.show();
+        }
+
+        function downloadResult(resultId) {
+            // Create a temporary link to download individual result
+            const link = document.createElement('a');
+            link.href = '@Url.Action("DownloadIndividualResult", "Admin")?id=' + resultId;
+            link.download = 'exam_result_' + resultId + '.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadDetailedResult() {
+            if (currentResultId) {
+                const link = document.createElement('a');
+                link.href = '@Url.Action("DownloadDetailedResult", "Admin")?id=' + currentResultId;
+                link.download = 'detailed_result_' + currentResultId + '.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function exportResults() {
+            // Create a temporary link to download all results
+            const link = document.createElement('a');
+            link.href = '@Url.Action("DownloadResults", "Admin")';
+            link.download = 'all_exam_results.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+}

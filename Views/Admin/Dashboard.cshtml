@@ -1,0 +1,295 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="dashboard-grid">
+    <!-- Quick Action Buttons -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Quick Actions</h5>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-primary w-100" onclick="addNewQuestions()">
+                                <i class="fas fa-plus-circle me-2"></i>Add New Questions
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-success w-100" onclick="createNewExam()">
+                                <i class="fas fa-file-alt me-2"></i>Create New Exam
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-info w-100" onclick="exploreResults()">
+                                <i class="fas fa-chart-bar me-2"></i>Explore Results
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-warning w-100" onclick="manualMarking()">
+                                <i class="fas fa-edit me-2"></i>Manual Marking
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2">
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-secondary w-100" onclick="loginFilter()">
+                                <i class="fas fa-filter me-2"></i>Login Filter
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-danger w-100" onclick="startAll()">
+                                <i class="fas fa-play me-2"></i>Start All
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-primary w-100" onclick="viewDetails()">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-success w-100" onclick="downloadResults()">
+                                <i class="fas fa-download me-2"></i>Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-title">Total Teacher</div>
+                            <div class="stat-value">@ViewBag.TotalTeachers</div>
+                            <a href="@Url.Action("UserManagement", "Admin")" class="stat-link">View User</a>
+                        </div>
+                        <div class="stat-icon">👥</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-title">Total Student</div>
+                            <div class="stat-value">@ViewBag.TotalStudents</div>
+                            <a href="@Url.Action("UserManagement", "Admin")" class="stat-link">View User</a>
+                        </div>
+                        <div class="stat-icon">🎓</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-title">Active Classes</div>
+                            <div class="stat-value">@ViewBag.ActiveClasses</div>
+                            <a href="@Url.Action("ClassManagement", "Admin")" class="stat-link">View Classes</a>
+                        </div>
+                        <div class="stat-icon">▶</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-title">Pending Classes</div>
+                            <div class="stat-value">@ViewBag.PendingClasses</div>
+                            <a href="@Url.Action("ClassManagement", "Admin")" class="stat-link">View Classes</a>
+                        </div>
+                        <div class="stat-icon">⏳</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title fw-semibold">Monthly Average Performance</div>
+                    <canvas id="lineChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title fw-semibold">Top 5 Questions Answered Wrongly</div>
+                    <canvas id="barChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Start All Confirmation -->
+<div class="modal fade" id="startAllModal" tabindex="-1" aria-labelledby="startAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="startAllModalLabel">Start All Operations</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to start all pending operations?</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="confirmStartAll">
+                    <label class="form-check-label" for="confirmStartAll">
+                        I confirm that I want to start all operations
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmStartAll()">Start All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function() {
+            const lineCtx = document.getElementById('lineChart');
+            if (lineCtx) {
+                new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Feb','May','Oct','Jan','Aug','Jul','Sep','Dec','Apr','Nov','Mar'],
+                        datasets: [{
+                            label: 'Monthly Average Performance',
+                            data: [0,6,7,8,10,12,15,18,20,30,40],
+                            borderColor: '#6f42c1',
+                            backgroundColor: 'rgba(111,66,193,0.15)',
+                            pointBackgroundColor: '#6f42c1',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            const barCtx = document.getElementById('barChart');
+            if (barCtx) {
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Question 1','Question 2','Question 3','Question 4','Question 5'],
+                        datasets: [{
+                            label: 'Wrong Answers',
+                            data: [9,8,8,8,7],
+                            backgroundColor: '#6f42c1'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            y: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        })();
+
+        // Quick Action Functions
+        function addNewQuestions() {
+            window.location.href = '@Url.Action("QuestionManagement", "Admin")';
+        }
+
+        function createNewExam() {
+            window.location.href = '@Url.Action("ExamManagement", "Admin")';
+        }
+
+        function exploreResults() {
+            window.location.href = '@Url.Action("ExamResult", "Admin")';
+        }
+
+        function manualMarking() {
+            window.location.href = '@Url.Action("ManualMarking", "Admin")';
+        }
+
+        function loginFilter() {
+            window.location.href = '@Url.Action("LoginHistory", "Admin")';
+        }
+
+        function startAll() {
+            const modal = new bootstrap.Modal(document.getElementById('startAllModal'));
+            modal.show();
+        }
+
+        function confirmStartAll() {
+            if (document.getElementById('confirmStartAll').checked) {
+                // Send AJAX request to start all operations
+                fetch('@Url.Action("StartAllOperations", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('All operations started successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error starting operations: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while starting operations.');
+                });
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('startAllModal'));
+                modal.hide();
+            } else {
+                alert('Please confirm that you want to start all operations.');
+            }
+        }
+
+        function viewDetails() {
+            window.location.href = '@Url.Action("ExamResult", "Admin")';
+        }
+
+        function downloadResults() {
+            // Create a temporary link to download results
+            const link = document.createElement('a');
+            link.href = '@Url.Action("DownloadResults", "Admin")';
+            link.download = 'exam_results.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+}

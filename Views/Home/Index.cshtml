@@ -1,0 +1,398 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "ExamEase - Online Exam System";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .hero-content {
+            color: white;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .auth-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 1rem 2rem;
+        }
+        .auth-tabs .nav-link.active {
+            color: #667eea;
+            background: none;
+            border-bottom: 3px solid #667eea;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .role-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .role-option:hover {
+            border-color: #667eea;
+            background-color: #f8f9ff;
+        }
+        .role-option.selected {
+            border-color: #667eea;
+            background-color: #f8f9ff;
+        }
+        .role-option i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .features-section {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0, 0, 0, 0.1); backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="#">ExamEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Revolutionize how you evaluate your students</h1>
+                        <p class="hero-subtitle">ExamEase is an online exam system that delivers exam management, question bank management, automated grading, analytical dashboards, and more.</p>
+                        <button class="btn btn-primary-custom btn-lg" onclick="scrollToAuth()">Get Started</button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="auth-card">
+                        <ul class="nav nav-tabs auth-tabs" id="authTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Login</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab">Sign Up</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content mt-4" id="authTabsContent">
+                            <!-- Login Tab -->
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="loginEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="loginPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Role</label>
+                                        <div class="role-selector">
+                                            <div class="role-option" data-role="admin">
+                                                <i class="fas fa-user-shield"></i>
+                                                <div>Admin</div>
+                                            </div>
+                                            <div class="role-option" data-role="instructor">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                <div>Instructor</div>
+                                            </div>
+                                            <div class="role-option" data-role="student">
+                                                <i class="fas fa-user-graduate"></i>
+                                                <div>Student</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary-custom">Login</button>
+                                    </div>
+                                </form>
+</div>
+                            
+                            <!-- Sign Up Tab -->
+                            <div class="tab-pane fade" id="signup" role="tabpanel">
+                                <form id="signupForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="signupFirstName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="signupLastName" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="signupEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="signupPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="signupConfirmPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Role</label>
+                                        <div class="role-selector">
+                                            <div class="role-option" data-role="admin">
+                                                <i class="fas fa-user-shield"></i>
+                                                <div>Admin</div>
+                                            </div>
+                                            <div class="role-option" data-role="instructor">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                <div>Instructor</div>
+                                            </div>
+                                            <div class="role-option" data-role="student">
+                                                <i class="fas fa-user-graduate"></i>
+                                                <div>Student</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary-custom">Sign Up</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold">Why Choose ExamEase?</h2>
+                <p class="lead text-muted">Powerful features designed for modern education</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h4>Exam Management</h4>
+                        <p class="text-muted">Create, schedule, and manage exams with ease. Support for multiple question types and automated grading.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Analytics Dashboard</h4>
+                        <p class="text-muted">Comprehensive insights into student performance, exam statistics, and learning analytics.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Secure & Reliable</h4>
+                        <p class="text-muted">Advanced security features, anti-cheating measures, and reliable performance for critical exams.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Role selection functionality
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const selectedRole = document.querySelector('.role-option.selected')?.dataset.role || 'student';
+            
+            // Simple validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Redirect based on role
+            switch(selectedRole) {
+                case 'admin':
+                    window.location.href = '/Admin/Dashboard';
+                    break;
+                case 'instructor':
+                    window.location.href = '/Instructor/Index';
+                    break;
+                case 'student':
+                    window.location.href = '/Student/Index';
+                    break;
+                default:
+                    window.location.href = '/Student/Index';
+            }
+        });
+
+        // Sign up form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('signupFirstName').value;
+            const lastName = document.getElementById('signupLastName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const selectedRole = document.querySelector('.role-option.selected')?.dataset.role || 'student';
+            
+            // Simple validation
+            if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            // For demo purposes, redirect to appropriate dashboard
+            alert('Account created successfully! Redirecting to dashboard...');
+            switch(selectedRole) {
+                case 'admin':
+                    window.location.href = '/Admin/Dashboard';
+                    break;
+                case 'instructor':
+                    window.location.href = '/Instructor/Index';
+                    break;
+                case 'student':
+                    window.location.href = '/Student/Index';
+                    break;
+                default:
+                    window.location.href = '/Student/Index';
+            }
+        });
+
+        // Scroll to auth section
+        function scrollToAuth() {
+            document.querySelector('.auth-card').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+    </script>
+</body>
+</html>

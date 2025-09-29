@@ -1,0 +1,172 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Exam In Progress</div>
+                        <div class="stat-value">@ViewBag.ExamsInProgress</div>
+                        <a href="@Url.Action("ExamResults", "Instructor")" class="stat-link">View Exam</a>
+                    </div>
+                    <div class="stat-icon">▶</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Exam Completed</div>
+                        <div class="stat-value">@ViewBag.ExamsCompleted</div>
+                        <a href="@Url.Action("ExamResults", "Instructor")" class="stat-link">View Exam</a>
+                    </div>
+                    <div class="stat-icon">✔</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Pending Marking</div>
+                        <div class="stat-value">@ViewBag.PendingMarking</div>
+                        <a href="@Url.Action("ManualMarking", "Instructor")" class="stat-link">Open</a>
+                    </div>
+                    <div class="stat-icon">✍</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-title">Active Classes</div>
+                        <div class="stat-value">@ViewBag.ActiveClasses</div>
+                        <a href="@Url.Action("ManageClasses", "Instructor")" class="stat-link">Manage</a>
+                    </div>
+                    <div class="stat-icon">🏫</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-12 col-xl-7">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Recent Exams</h6>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Exams != null && ViewBag.Exams.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Exam Title</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var exam in ViewBag.Exams)
+                                {
+                                    var statusClass = exam.Status switch
+                                    {
+                                        "Active" => "bg-success",
+                                        "Draft" => "bg-info",
+                                        "Completed" => "bg-warning",
+                                        "Scheduled" => "bg-primary",
+                                        _ => "bg-secondary"
+                                    };
+                                    
+                                    <tr>
+                                        <td>@exam.Title</td>
+                                        <td>@exam.Subject</td>
+                                        <td><span class="badge @statusClass">@exam.Status</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewExam(@exam.Id)">View</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted">
+                        <div class="mb-2" style="font-size:42px">📝</div>
+                        <div>No exams available</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-5">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Pending Manual Marking</h6>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.ManualMarkingItems != null && ViewBag.ManualMarkingItems.Count > 0)
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in ViewBag.ManualMarkingItems)
+                        {
+                            if (item.Status == "Pending")
+                            {
+                                var priorityClass = item.Priority switch
+                                {
+                                    "High" => "text-danger",
+                                    "Medium" => "text-warning",
+                                    "Low" => "text-success",
+                                    _ => "text-muted"
+                                };
+                                
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-bold">@item.StudentName</div>
+                                        <small class="text-muted">@item.ExamTitle</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-warning">@item.QuestionsPending questions</span>
+                                        <div class="small @priorityClass">@item.Priority Priority</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted">
+                        <div class="mb-2" style="font-size:42px">✅</div>
+                        <div>No pending marking</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewExam(examId) {
+    window.location.href = '@Url.Action("ExamResults", "Instructor")';
+}
+</script>
+
+

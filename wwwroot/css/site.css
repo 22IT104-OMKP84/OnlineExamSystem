@@ -1,0 +1,85 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Admin layout */
+.admin-wrapper { min-height: 100vh; background: #f8f9fb; }
+.admin-sidebar { width: 240px; background: #ffffff; border-right: 1px solid #eee; position: sticky; top: 0; height: 100vh; }
+.admin-sidebar .sidebar-brand { font-size: 22px; }
+.admin-sidebar .nav .nav-link { color: #5b6679; border-radius: 8px; margin: 4px 8px; }
+.admin-sidebar .nav .nav-link.active, .admin-sidebar .nav .nav-link:hover { background: #ece8ff; color: #5a3ec8; }
+.admin-topbar { height: 64px; background: #ffffff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 2; }
+.admin-main { padding-bottom: 24px; }
+.admin-footer { background: transparent; border-top: 1px solid #eee; }
+
+/* Student layout */
+.student-wrapper { min-height: 100vh; background: #f8f9fb; }
+.student-sidebar { width: 240px; background: #ffffff; border-right: 1px solid #eee; position: sticky; top: 0; height: 100vh; }
+.student-sidebar .sidebar-brand { font-size: 22px; }
+.student-sidebar .nav .nav-link { color: #5b6679; border-radius: 8px; margin: 4px 8px; }
+.student-sidebar .nav .nav-link.active, .student-sidebar .nav .nav-link:hover { background: #ece8ff; color: #5a3ec8; }
+.student-topbar { height: 64px; background: #ffffff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 2; }
+.student-main { padding-bottom: 24px; }
+
+/* Instructor layout */
+.instructor-wrapper { min-height: 100vh; background: #f8f9fb; }
+.instructor-sidebar { width: 240px; background: #ffffff; border-right: 1px solid #eee; position: sticky; top: 0; height: 100vh; }
+.instructor-sidebar .sidebar-brand { font-size: 22px; }
+.instructor-sidebar .nav .nav-link { color: #5b6679; border-radius: 8px; margin: 4px 8px; }
+.instructor-sidebar .nav .nav-link.active, .instructor-sidebar .nav .nav-link:hover { background: #ece8ff; color: #5a3ec8; }
+.instructor-topbar { height: 64px; background: #ffffff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 2; }
+.instructor-main { padding-bottom: 24px; }
+
+/* Dashboard */
+.stat-card { border: none; box-shadow: 0 6px 18px rgba(0,0,0,0.06); border-radius: 16px; }
+.stat-title { color: #7a869a; font-size: 14px; }
+.stat-value { font-size: 32px; font-weight: 700; margin-top: 4px; }
+.stat-link { font-size: 13px; color: #5a3ec8; text-decoration: none; }
+.stat-icon { width: 44px; height: 44px; border-radius: 12px; background: #efeafd; color: #5a3ec8; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+@media (max-width: 767.98px) {
+  .admin-sidebar { position: fixed; left: -260px; transition: left .25s ease; }
+  .admin-sidebar.open { left: 0; }
+  
+  .student-sidebar { position: fixed; left: -260px; transition: left .25s ease; }
+  .student-sidebar.open { left: 0; }
+  
+  .instructor-sidebar { position: fixed; left: -260px; transition: left .25s ease; }
+  .instructor-sidebar.open { left: 0; }
+}
+
+/* Study Materials */
+.study-material-card { border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 12px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.study-material-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.study-material-card .card-body { padding: 1.5rem; }
+.study-material-card .card-title { font-weight: 600; color: #2c3e50; }
+.study-material-card .card-text { color: #6c757d; line-height: 1.5; }
+.study-material-card .btn { border-radius: 8px; font-weight: 500; }

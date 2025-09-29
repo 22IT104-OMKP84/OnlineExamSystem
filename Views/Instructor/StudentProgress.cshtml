@@ -1,0 +1,94 @@
+@{
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+    ViewData["Title"] = "Student Progress";
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Student Progress</h5>
+                <div>
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2">
+                        <option>All Classes</option>
+                        <option>Mathematics 101</option>
+                        <option>Physics 101</option>
+                        <option>Chemistry 101</option>
+                    </select>
+                    <button type="button" class="btn btn-primary btn-sm">Generate Report</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Class</th>
+                                <th>Exams Taken</th>
+                                <th>Average Score</th>
+                                <th>Progress</th>
+                                <th>Trend</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>John Doe</td>
+                                <td>Mathematics 101</td>
+                                <td>5</td>
+                                <td>87%</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-success" style="width: 87%">87%</div>
+                                    </div>
+                                </td>
+                                <td><span class="text-success">↗ Improving</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-info">Progress Chart</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S002</td>
+                                <td>Jane Smith</td>
+                                <td>Physics 101</td>
+                                <td>4</td>
+                                <td>92%</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-success" style="width: 92%">92%</div>
+                                    </div>
+                                </td>
+                                <td><span class="text-success">↗ Excellent</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-info">Progress Chart</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>S003</td>
+                                <td>Mike Johnson</td>
+                                <td>Chemistry 101</td>
+                                <td>3</td>
+                                <td>65%</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-warning" style="width: 65%">65%</div>
+                                    </div>
+                                </td>
+                                <td><span class="text-warning">→ Stable</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                    <button class="btn btn-sm btn-outline-info">Progress Chart</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

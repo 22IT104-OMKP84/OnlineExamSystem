@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OnlineExamSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/OnlineExamSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="instructor-wrapper d-flex">
+        <aside class="instructor-sidebar d-flex flex-column">
+            <div class="sidebar-brand px-3 py-3 fw-bold">ExamEase</div>
+            <ul class="nav nav-pills flex-column mb-auto px-2">
+                <li class="nav-item"><a class="nav-link active" asp-area="" asp-controller="Instructor" asp-action="Index">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="ManageClasses">Manage Classes</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="QuestionBank">Question Bank</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="CreateExam">Create Exam</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="ManualMarking">Manual Marking</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="ExamResults">Exam Results</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="StudentProgress">Student Progress</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="Profile">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Instructor" asp-action="LoginHistory">Login History</a></li>
+            </ul>
+        </aside>
+        <div class="instructor-content flex-grow-1">
+            <header class="instructor-topbar d-flex align-items-center justify-content-between px-4 border-bottom bg-white" style="min-height:64px">
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary d-md-none" id="sidebarToggle">☰</button>
+                    <span class="fs-5 fw-semibold">@ViewData["Title"]</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light border dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px">I</div>
+                            <span class="d-none d-md-inline">Instructor</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" asp-controller="Instructor" asp-action="Profile">Profile</a></li>
+                            <li><hr class="dropdown-divider"/></li>
+                            <li>
+                                <form method="post" asp-controller="Login" asp-action="Logout" class="px-3 py-1">
+                                    <button type="submit" class="btn btn-link dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+            <main role="main" class="instructor-main px-4 py-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
